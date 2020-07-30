@@ -1,0 +1,136 @@
+package testdb;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JButton;
+import java.awt.BorderLayout;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.Font;
+import javax.swing.SwingConstants;
+import java.awt.Color;
+
+public class transac1 {
+	
+
+	private JFrame frame;
+
+	
+	public static void main(String[] args) {
+		
+		
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					transac1 window = new transac1();
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		
+	}
+
+	/**
+	 * Create the application.
+	 */
+	public transac1() {
+		initialize();
+	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() {
+		frame = new JFrame();
+		frame.setBounds(100, 100, 450, 300);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		JButton btnNewButton = new JButton("FUND TRANSFER");
+		btnNewButton.setBackground(new Color(240, 240, 240));
+		btnNewButton.setFont(new Font("Times New Roman", Font.BOLD, 14));
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			
+				
+				Connection myConn=null;
+				Statement Stat=null;
+				try {
+					//String driver="com.mysql.jdbc.Driver";
+				    String dbUrl="jdbc:mysql://localhost:3306/transacdb";
+				    String user="root";
+				    String pass="oracle";
+			
+				myConn=DriverManager.getConnection(dbUrl,user,pass);
+				Stat=myConn.createStatement();
+				for(int i=1;i<=10;i++) {
+				switch(i)	
+				{ 
+				case 1:
+					    ResultSet rs1 = Stat.executeQuery(
+								"select tid,acc_no,bal,t_amnt,r_bal from trans order by tid desc LIMIT 5");
+				        while (rs1.next()) {    
+				        	System.out.println("TRANSACTION"+":"+""+rs1.getInt("tid")+"  "+"acc no"+":"+rs1.getInt("acc_no")+"  "+"bal"+":"+rs1.getDouble("bal")+"  "+"trans amnt"+":"+rs1.getDouble("t_amnt")+"  "+"rem bal"+":"+rs1.getDouble("r_bal"));
+						}
+				        break;
+				case 2:
+					 		                ResultSet rs2 = Stat.executeQuery(
+								"select tid,acc_no,bal,t_amnt,r_bal from acc");
+				        while (rs2.next()) { 
+				        	System.out.println("\n");
+				        	System.out.println("TRANSACTION"+":"+""+rs2.getInt("tid")+"  "+"acc no"+":"+rs2.getInt("acc_no")+"  "+"bal"+":"+rs2.getDouble("bal")+"  "+"trans amnt"+":"+rs2.getDouble("t_amnt")+"  "+"rem bal"+":"+rs2.getDouble("r_bal"));
+						}
+				        
+					break;
+				case 3:
+					ResultSet rs3 = Stat.executeQuery("select tid,acc_no,bal,t_amnt,r_bal from acc");
+					 while (rs3.next()) { 
+						 System.out.println("\n");
+						 System.out.println("TRANSACTION"+":"+""+rs3.getInt("tid")+"  "+"acc no"+":"+rs3.getInt("acc_no")+"  "+"bal"+":"+rs3.getDouble("bal")+"  "+"trans amnt"+":"+rs3.getDouble("t_amnt")+"  "+"rem bal"+":"+rs3.getDouble("r_bal"));
+						}
+				        
+					break;
+				case 4:
+					ResultSet rs4 = Stat.executeQuery(
+							"select r_bal from acc");
+			        while (rs4.next()) {   
+			        	System.out.println("\n");
+			        	System.out.println("Remaining balance:"+""+""+""+rs4.getDouble("r_bal"));
+					}
+					break;
+				
+
+				}
+				}
+				}
+				catch(Exception exc){
+				exc.printStackTrace();
+				}
+				finally{
+				try{
+				   if (Stat!=null){
+				     Stat.close();
+				        }
+				   if(myConn!=null){
+				     myConn.close();
+				    }
+				 }catch(Exception e){
+					 e.printStackTrace();
+				 }
+			
+				}
+				
+				
+			}
+		});
+		
+		frame.getContentPane().add(btnNewButton, BorderLayout.CENTER);
+	}
+
+}

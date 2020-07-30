@@ -1,0 +1,22 @@
+UPDATE `transacdb`.`acc`
+SET
+`tid` = tid+1,
+`bal` = bal-1000,
+`r_bal` =r_bal-1000;
+
+
+
+
+INSERT INTO `transacdb`.`trans`
+(`tid`,
+`acc_no`,
+`bal`,
+`t_amnt`,
+`r_bal`)
+select * from `transacdb`.`acc`;
+
+
+
+
+
+
